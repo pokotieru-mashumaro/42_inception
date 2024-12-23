@@ -3,8 +3,7 @@ version: '3.9'
 services:
   mariadb:
     build: ./mariadb
-    ports:
-      - "3306:3306"
+    image: mariadb
     env_file:
       - .env
     volumes:
@@ -15,8 +14,7 @@ services:
 
   wordpress:
     build: ./wordpress
-    ports:
-      - "9000:9000"
+    image: wordpress
     env_file:
       - .env
     volumes:
@@ -30,6 +28,7 @@ services:
       
   nginx:
     build: ./nginx
+    image: nginx
     ports:
       - "443:443"
     env_file:

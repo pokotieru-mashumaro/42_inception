@@ -1,4 +1,4 @@
-FROM debian:stable-slim
+FROM debian:buster
 
 RUN apt-get update && apt-get install -y \
     php-fpm \
@@ -15,34 +15,13 @@ RUN apt-get update && apt-get install -y \
     mariadb-client \
     vim
 
-# WP-CLIのインストール
-RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar && \
-    chmod +x wp-cli.phar && \
-    mv wp-cli.phar /usr/local/bin/wp
-
-# Create WordPress directory
-RUN mkdir -p /var/www/wordpress
-
-WORKDIR /var/www/wordpress
-# WordPressのダウンロードとインストール
-RUN wget https://wordpress.org/latest.tar.gz && \
-    tar -xzf latest.tar.gz && \
-    rm latest.tar.gz && \
-    mv wordpress/* . && \
-    rmdir wordpress
-
-# WordPressの設定
-# COPY ./wp-config.php /var/www/html/
-RUN chown -R www-data:www-data /var/www/wordpress
-
-# PHP-FPMの設定
 RUN mkdir -p /run/php
-COPY ./www.conf /etc/php/8.2/fpm/pool.d/www.conf
 
-# Setup script
-COPY ./setup.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/setup.sh
+COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/
+COPY ./tools/setup.sh /tmp/
 
-EXPOSE 9000
+RUN chmod +x /tmp/setup.sh
 
-CMD ["/usr/local/bin/setup.sh"]
+# EXPOSE  9000
+
+ENTRYPOINT [ "sh", "/tmp/setup.sh" ]

@@ -1,18 +1,22 @@
-FROM debian:stable-slim
+FROM debian:buster
 
-RUN apt-get update && apt-get install -y mariadb-server vim \
+RUN apt-get update && apt-get install -y mariadb-server mariadb-client vim \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /var/run/mysqld \
-    && mkdir -p /var/lib/mysql \
-    && chown -R mysql:mysql /var/run/mysqld \
-    && chown -R mysql:mysql /var/lib/mysql
+RUN mkdir -p /var/run/mysqld && \
+    chown -R mysql:mysql /var/run/mysqld && \
+    chown -R mysql:mysql /etc/mysql/
 
-COPY ./init.sql /docker-entrypoint-initdb.d/
-COPY ./my.cnf /etc/mysql
-COPY ./start.sh /start.sh
-RUN chmod +x /start.sh
+COPY ./tools/start.sh /tmp/
+COPY ./conf/init.sql /tmp/
+COPY ./conf/my.cnf /etc/mysql
 
-EXPOSE 3306
+RUN chown -R mysql:mysql /tmp/ && \
+    chown -R mysql:mysql /etc/mysql
 
-CMD ["/start.sh"]
+RUN chmod +x /tmp/start.sh
+
+# EXPOSE 3306
+USER mysql
+
+ENTRYPOINT ["sh", "/tmp/start.sh"]
