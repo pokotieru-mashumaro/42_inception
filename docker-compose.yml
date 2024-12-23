@@ -1,0 +1,70 @@
+version: '3.9'
+
+services:
+  mariadb:
+    build: ./mariadb
+    ports:
+      - "3306:3306"
+    env_file:
+      - .env
+    volumes:
+      - mariadb:/var/lib/mysql
+    restart: always
+    networks:
+      - backend
+
+  wordpress:
+    build: ./wordpress
+    ports:
+      - "9000:9000"
+    env_file:
+      - .env
+    volumes:
+      - wordpress:/var/www/html
+    depends_on:
+      - mariadb
+    restart: always
+    networks:
+      - frontend
+      - backend
+      
+  nginx:
+    build: ./nginx
+    ports:
+      - "443:443"
+    env_file:
+      - .env
+    volumes:
+      - nginx_conf:/etc/nginx/conf.d
+      - wordpress:/var/www/html
+    depends_on:
+      - wordpress
+    restart: always
+    networks:
+      - frontend
+
+volumes:
+  mariadb:
+    driver: local
+    driver_opts:
+      type: none
+      device: /Users/iniad/data/mariadb
+      o: bind
+  wordpress:
+    driver: local
+    driver_opts:
+      type: none
+      device: /Users/iniad/data/html
+      o: bind
+  nginx_conf:
+    driver: local
+    driver_opts:
+      type: none
+      device: /Users/iniad/data/nginx
+      o: bind
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
