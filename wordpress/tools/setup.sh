@@ -1,9 +1,10 @@
 #!/bin/bash
 
+# mkdir -p "$WP_PATH"
+
 if [ ! -f /var/www/html/wp-config.php ]; then
-   wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-   chmod +x wp-cli.phar
-   mv wp-cli.phar /usr/local/bin/wp
+   # sed -i "s/^;phar.readonly.*$/phar.readonly = Off/g" /etc/php/7.3/cli/php.ini
+   # sed -i "s/^;phar.readonly.*$/phar.readonly = Off/g" /etc/php/7.3/fpm/php.ini
 
    wp core download --path=$WP_PATH --allow-root
 
@@ -14,9 +15,11 @@ if [ ! -f /var/www/html/wp-config.php ]; then
    wp core install --path=$WP_PATH --url=$DOMAIN_NAME --title="Inception"\
       --admin_user=$WP_SUPERUSER --admin_password=$WP_SUPERUSER_PASSWORD \
       --admin_email=$WP_SUPERUSER_EMAIL --skip-email --allow-root
-
+   
    wp user create $WP_USER $WP_USER_EMAIL --role=author \
       --path=$WP_PATH --user_pass=$WP_USER_PASSWORD --allow-root
+
 fi
 
 /usr/sbin/php-fpm7.3 -F
+

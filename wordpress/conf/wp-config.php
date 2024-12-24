@@ -1,5 +1,4 @@
 <?php
-// データベース名を環境変数と一致させる
 define( 'DB_NAME', getenv('MYSQL_DATABASE') );
 define( 'DB_USER', getenv('MYSQL_USER') );
 define( 'DB_PASSWORD', getenv('MYSQL_PASSWORD') );
