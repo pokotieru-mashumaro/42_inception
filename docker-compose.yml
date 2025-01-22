@@ -2,6 +2,7 @@ version: '3.9'
 
 services:
   mariadb:
+    container_name: mariadb
     build: ./mariadb
     image: mariadb
     env_file:
@@ -13,6 +14,7 @@ services:
       - backend
 
   wordpress:
+    container_name: wordpress
     build: ./wordpress
     image: wordpress
     env_file:
@@ -27,6 +29,7 @@ services:
       - backend
       
   nginx:
+    container_name: nginx
     build: ./nginx
     image: nginx
     ports:

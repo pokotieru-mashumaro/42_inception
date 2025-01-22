@@ -5,18 +5,18 @@ RUN apt-get update && apt-get install -y mariadb-server mariadb-client vim \
 
 RUN mkdir -p /var/run/mysqld && \
     chown -R mysql:mysql /var/run/mysqld && \
-    chmod 777 /var/run/mysqld
+    chown -R mysql:mysql /etc/mysql/
 
 COPY ./tools/start.sh /tmp/
 COPY ./conf/init.sql /tmp/
-COPY ./conf/my.cnf /etc/mysql/my.cnf
+COPY ./conf/my.cnf /etc/mysql
 
-RUN chmod 644 /etc/mysql/my.cnf && \
-    chmod +x /tmp/start.sh && \
-    chown -R mysql:mysql /var/lib/mysql /tmp/
+RUN chown -R mysql:mysql /tmp/ && \
+    chown -R mysql:mysql /etc/mysql
 
-EXPOSE 3306
+RUN chmod +x /tmp/start.sh
 
+# EXPOSE 3306
 USER mysql
 
-ENTRYPOINT ["/tmp/start.sh"]
+ENTRYPOINT ["sh", "/tmp/start.sh"]

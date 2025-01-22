@@ -13,7 +13,8 @@ RUN apt-get update && apt-get install -y \
     php-zip \
     wget \
     mariadb-client \
-    vim 
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /run/php
 RUN mkdir -p /var/www/html && chown -R www-data:www-data /var/www/html
@@ -23,12 +24,11 @@ RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.ph
     mv wp-cli.phar /usr/local/bin/wp
 
 # COPY ./conf/wp-config.php /var/www/html
-
 COPY ./conf/www.conf /etc/php/7.3/fpm/pool.d/
 COPY ./tools/setup.sh ./
 
 RUN chmod +x /setup.sh
 
-# EXPOSE  9000
+EXPOSE 9000
 
 ENTRYPOINT [ "sh", "/setup.sh" ]
