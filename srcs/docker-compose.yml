@@ -3,20 +3,24 @@ version: '3.9'
 services:
   mariadb:
     container_name: mariadb
-    build: ./mariadb
+    build: ./requirements/mariadb
     image: mariadb
+    ports:
+      - "3306:3306"
     env_file:
       - .env
     volumes:
       - mariadb:/var/lib/mysql
     restart: always
     networks:
-      - backend
-
+      - inception
+      
   wordpress:
     container_name: wordpress
-    build: ./wordpress
+    build: ./requirements/wordpress
     image: wordpress
+    ports:
+      - "9000:9000"
     env_file:
       - .env
     volumes:
@@ -25,48 +29,39 @@ services:
       - mariadb
     restart: always
     networks:
-      - frontend
-      - backend
+      - inception
       
   nginx:
     container_name: nginx
-    build: ./nginx
+    build: ./requirements/nginx
     image: nginx
     ports:
       - "443:443"
     env_file:
       - .env
     volumes:
-      - nginx_conf:/etc/nginx/conf.d
       - wordpress:/var/www/html
     depends_on:
       - wordpress
     restart: always
     networks:
-      - frontend
+      - inception
 
 volumes:
   mariadb:
     driver: local
     driver_opts:
       type: none
-      device: /Users/iniad/data/mariadb
+      device: /Users/komatsukotarou/data/mariadb
       o: bind
   wordpress:
     driver: local
     driver_opts:
       type: none
-      device: /Users/iniad/data/html
-      o: bind
-  nginx_conf:
-    driver: local
-    driver_opts:
-      type: none
-      device: /Users/iniad/data/nginx
+      device: /Users/komatsukotarou/data/html
       o: bind
 
 networks:
-  frontend:
-    driver: bridge
-  backend:
+  inception:
+    name: inception
     driver: bridge
