@@ -21,7 +21,7 @@ if [ ! -f "/var/www/html/wp-config.php" ]; then
         --admin_email=$WP_USER_EMAIL \
         --skip-email --allow-root
     
-    # Error: The 'kkomatsu' username is already registered.　て出たから
+    # Error: The 'kkomatsu' username is already registered. て出たから
     if ! wp user get $WP_USER --path='/var/www/html' --allow-root > /dev/null 2>&1; then
         wp user create $WP_USER $WP_USER_EMAIL \
             --role=author \

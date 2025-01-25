@@ -2,8 +2,8 @@ version: '3.9'
 
 services:
   mariadb:
-    container_name: mariadb
     image: mariadb
+    container_name: mariadb
     build: ./requirements/mariadb
     ports:
       - "3306:3306"
@@ -16,8 +16,8 @@ services:
       - inception
 
   wordpress:
-    container_name: wordpress
     image: wordpress
+    container_name: wordpress
     build: ./requirements/wordpress
     ports:
       - "9000:9000"
@@ -32,8 +32,8 @@ services:
       - inception
       
   nginx:
-    container_name: nginx
     image: nginx
+    container_name: nginx
     build: ./requirements/nginx
     ports:
       - "443:443"
@@ -52,13 +52,13 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /Users/komatsukotarou/data/mariadb
+      device: ${HOME}/data/mariadb
       o: bind
   wordpress:
     driver: local
     driver_opts:
       type: none
-      device: /Users/komatsukotarou/data/html
+      device: ${HOME}/data/html
       o: bind
 
 networks:
