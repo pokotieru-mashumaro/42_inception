@@ -1,3 +1,6 @@
+D_C=docker compose
+D_C_FILE = ./srcs/docker-compose.yml
+
 all: up
 
 up: 
@@ -5,18 +8,17 @@ up:
 	mkdir -p ~/data/mariadb
 	chmod -R 755 ~/data/html
 	chmod -R 755 ~/data/mariadb
-	docker compose -f srcs/docker-compose.yml up
+	$(D_C) -f $(D_C_FILE) up
 
 build:
-	docker compose -f srcs/docker-compose.yml build --no-cache
+	$(D_C) -f $(D_C_FILE) build --no-cache
 
 down:
-	docker compose -f srcs/docker-compose.yml down
-
-stop:
-	docker compose -f srcs/docker-compose.yml stop
+	$(D_C) -f $(D_C_FILE) down
 
 clean:
-	docker rmi wordpress mariadb nginx
 	rm -rf ~/data/html
 	rm -rf ~/data/mariadb
+	docker rmi wordpress mariadb nginx
+
+.PHONY: up build down clean

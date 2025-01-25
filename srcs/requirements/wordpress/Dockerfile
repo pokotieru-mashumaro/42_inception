@@ -23,13 +23,11 @@ RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.ph
 RUN mkdir -p /run/php
 
 RUN mkdir -p /var/www/html
-RUN	chown -R root:root /var/www/html
+RUN chown -R www-data:www-data /var/www/html
 
 COPY ./tools/init.sh ./
 COPY ./conf/www.conf /etc/php/8.2/fpm/pool.d/www.conf
 
 RUN chmod +x /init.sh
 
-# EXPOSE 9000
-
-ENTRYPOINT [ "sh", "/init.sh" ]
+ENTRYPOINT ["sh", "/init.sh"]
