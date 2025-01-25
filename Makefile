@@ -19,4 +19,4 @@ stop:
 clean:
 	docker rmi wordpress mariadb nginx
 	rm -rf ~/data/html
-	rm -rf ~/data/mariadbmake 
+	rm -rf ~/data/mariadb
