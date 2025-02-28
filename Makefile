@@ -6,8 +6,6 @@ all: up
 up: 
 	mkdir -p ~/data/html
 	mkdir -p ~/data/mariadb
-	chmod -R 755 ~/data/html
-	chmod -R 755 ~/data/mariadb
 	$(D_C) -f $(D_C_FILE) up
 
 build:
@@ -17,8 +15,9 @@ down:
 	$(D_C) -f $(D_C_FILE) down
 
 clean:
-	rm -rf ~/data/html
-	rm -rf ~/data/mariadb
+	sudo rm -rf ~/data/html
 	docker rmi wordpress mariadb nginx
+	docker volume prune -f
+	docker network prune -f
 
 .PHONY: up build down clean
